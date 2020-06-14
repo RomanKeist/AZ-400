@@ -1,33 +1,27 @@
-# Deploy to Azure Button
+# Using ARM Templates
 
-[![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FARambazamba%2FAZ-204%2Fmaster%2FDemos%2F05%2520IaaS%2F02%2520ARM%2FDemo-02%2Fazuredeploy.json)
-
-![form](../_images/template-form.png)
-
-## Create a "Deploy to Azure Button"
-
-[Use a deployment button to deploy templates from GitHub repository](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-to-azure-button)
-
-Export or Create a new ARM Template:
-
-![export](../_images/export-arm.png)
-
-Get the raw path for a file use the `Raw-Button`
-
-![githubuserconent](../_images/githubusercontent.png)
+## Deploy template from the command line:
 
 ```
-https://raw.githubusercontent.com/ARambazamba/AZ-204/master/Demos/05%20IaaS/02%20ARM/Demo-02/azuredeploy.json
+rnd=$RANDOM
+loc=westeurope
+grp=az400-deploy-arm-$rnd
+acctname=armstorage$rnd
 ```
 
-Encode the Url using an [Online Encoder](https://www.urlencoder.org/):
+Upload azuredeploy.json to Cloud Shell or ls ...
 
 ```
-https%3A%2F%2Fraw.githubusercontent.com%2FARambazamba%2FAZ-204%2Fmaster%2FDemos%2F05%2520IaaS%2F02%2520ARM%2FDemo-02%2Fazuredeploy.json
+az group create -n $grp -l $loc
+az deployment group create -g $grp -n rollout1  --template-file azuredeploy.json --parameters storageAcctName=$acctname
 ```
 
-Compose the complete Url:
+> Note: If you are using VSCode Bash in Cloud Shell you will need to upload `azuredeploy.json` manually. An alternative is provided in this [post](https://microsoft.github.io/AzureTipsAndTricks/blog/tip127.html)
+
+## Deploy template from the git:
+
+[Try this template](https://azure.microsoft.com/de-de/resources/templates/201-encrypt-running-windows-vm/)
 
 ```
-[![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/FULL-URL-HERE)
+az deployment group create -g az400-git-$RANDOm -n winVM --template-uri https://raw.githubusercontent.com/azure/azure-quickstart-templates/master/201-encrypt-running-windows-vm/azuredeploy.json
 ```

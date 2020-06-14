@@ -1,1 +1,0 @@
-﻿console.log("logging from script 2");
