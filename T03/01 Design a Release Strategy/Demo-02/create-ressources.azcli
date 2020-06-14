@@ -1,0 +1,55 @@
+rnd=$RANDOM
+grp=az400-T03-stages-$rnd
+loc=westeurope
+acct=stages$rnd
+vault=az400t03stages-$rnd
+container="backup"
+appPlan=stages-$rnd
+web=mvc-stages-$rnd
+
+sqlserver=t03stages-$rnd
+db=LogDb
+sqladmin=dbadmin
+sqlpwd="Highsecure@123"
+
+# Storage Acct
+
+az group create -n $grp -l $loc
+
+az storage account create -l $loc -n $acct -g $grp --sku Standard_LRS
+
+key=$(az storage account keys list -n $acct --query "[0].[value][0]")
+
+az storage container create -n $container --account-key $key --account-name $acct
+
+echo "User this value for Storage var in pipeline: $acct"
+
+# Key Vault
+
+az keyvault create -l $loc -n $vault -g $grp --sku standard
+
+az keyvault key list --vault-name $vault
+
+az keyvault secret set --vault-name $vault --name "database-login" --value $sqladmin
+
+az keyvault secret set --vault-name $vault --name "database-password" --value $sqlpwd
+
+echo "User this value for Vault var in pipeline: $vault"
+
+# Database
+
+az sql server create -n $sqlserver -g $grp -l $loc --admin-user $sqladmin --admin-password $sqlpwd
+
+az sql db create -g $grp --server $sqlserver -n $db --service-objective Basic --collation SQL_Latin1_General_CP1_CI_AS
+
+echo "User this value for sqlserver var in pipeline: $sqlserver"
+
+
+# App Service
+az appservice plan create -n $appPlan -g $grp --sku FREE
+
+az webapp create -n $web -g $grp --plan $appPlan
+
+echo "Use this number for your Deploy Pipeline: $rnd"
+echo "Web Url: http://$web.azurewebsites.net"
+

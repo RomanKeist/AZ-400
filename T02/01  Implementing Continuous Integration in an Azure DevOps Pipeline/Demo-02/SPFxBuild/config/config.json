@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "hello-dev-ops-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/helloDevOps/HelloDevOpsWebPart.js",
+          "manifest": "./src/webparts/helloDevOps/HelloDevOpsWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "HelloDevOpsWebPartStrings": "lib/webparts/helloDevOps/loc/{locale}.js"
+  }
+}

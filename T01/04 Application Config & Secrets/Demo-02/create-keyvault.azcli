@@ -1,0 +1,46 @@
+rnd=$RANDOM
+grp=az400-t01-keyvault-$rnd
+loc=westeurope
+vault=labvault-$rnd
+appPlan=keyvault-$rnd
+web=mvc-keyvault-$rnd
+principal="http://devopskeyvault"
+
+az group create -n $grp -l $loc
+
+# add a service principal
+
+ap=$(az ad sp create-for-rbac -n $principal)
+
+echo "app principal:"
+echo $ap
+
+az ad sp list -o table 
+
+# create a key vault and add a value
+
+az keyvault create -l $loc -n $vault -g $grp --sku standard
+
+az keyvault key list --vault-name $vault
+
+az keyvault secret set --vault-name $vault --name "PWDFromKeyVault" --value "Super-sensible-pwd"
+
+az keyvault secret show --name "PWDFromKeyVault" --vault-name $vault
+
+# assign permissions to the service principal
+
+az keyvault set-policy -n $vault --spn $principal --secret-permissions get list
+
+# create a deployment target
+
+az appservice plan create -n $appPlan -g $grp --sku FREE
+
+az webapp create -n $web -g $grp --plan $appPlan
+
+# print out the FQDN for the Web App
+echo "Use this number for your Deploy Pipeline: $rnd"
+echo "Web Url: http://$web.azurewebsites.net"
+
+# cleanup after demo
+
+# az group delete -n $grp -y --no-wait

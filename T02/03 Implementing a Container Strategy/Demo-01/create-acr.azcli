@@ -1,0 +1,27 @@
+rnd=$RANDOM
+loc=westeurope
+grp=az400-t02-containers-$rnd
+reg=az400cr$rnd
+plan=container-$rnd
+
+# Create resource group, app service plan & container registry
+
+az group create -n $grp -l $loc
+az acr create -g $grp -n $reg --sku Basic -l westeurope
+echo "create container registry: $reg"
+az appservice plan create -n $plan -g $grp --sku b1 --is-linux
+
+# Build container
+docker build --rm -f "api.prod.dockerfile" -t foodservice .
+docker run -it --rm -p 5051:80 foodservice
+
+# Execute on local machine - adjust container reg name
+az login
+az acr login --name az400cr21046
+docker tag foodservice az400cr21046.azurecr.io/foodservice
+docker push az400cr21046.azurecr.io/foodservice
+
+# Run the image - can run in cloudshell agian
+
+az acr update -n az400cr21046 --admin-enabled true
+az webapp create -g $grp -p $plan -n az400-foodservice -i az400cr21046.azurecr.io/foodservice:latest

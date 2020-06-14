@@ -1,0 +1,11 @@
+az group create --name az400-scale --location westeurope 
+
+az vmss create --resource-group az400-scale --name myScaleSet --image UbuntuLTS --admin-username azureuser --upgrade-policy-mode automatic --generate-ssh-keys
+
+# Deploy Sample App & enable traffice
+
+az vmss extension set --publisher Microsoft.Azure.Extensions --version 2.0 --name CustomScript --resource-group az400-scale --vmss-name myScaleSet --settings '{ \"fileUris\": [\"https://raw.githubusercontent.com/Azure/azure-docs-powershell-samples/master/application-gateway/iis/install_nginx.sh\"], \"commandToExecute\": \"./install_nginx.sh\" }'
+
+az network lb rule create --resource-group az400-scale --name myLoadBalancerRuleWeb --lb-name myScaleSetLB --backend-pool-name myScaleSetLBBEPool --backend-port 80 --frontend-ip-name loadBalancerFrontEnd --frontend-port 80 --protocol tcp
+
+az network public-ip show --resource-group az400-scale --name myScaleSetLBPublicIP --query '[ipAddress]' --output tsv

@@ -1,0 +1,20 @@
+rnd=$RANDOM
+grp=az400-T03-cadence-$rnd
+loc=westeurope
+appPlanTest=cadenceB-$rnd
+appPlanProd=cadenceSlot-$rnd
+web=mvc-cadence-$rnd
+
+az group create -n $grp -l $loc
+
+az appservice plan create -n $appPlanTest -g $grp --sku B1
+
+az appservice plan create -n $appPlanProd -g $grp --sku P1V2
+
+az webapp create -n $web-test -g $grp -p $appPlanTest
+
+az webapp create -n $web-prod -g $grp -p $appPlanProd
+
+# Deploy the app
+
+az webapp deployment slot create -n staging -g $grp --slot swap

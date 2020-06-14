@@ -1,0 +1,8 @@
+rnd=$RANDOM
+loc=westeurope
+grp=az400-arm-$rnd
+acct=armdeployed$rnd
+
+az group create -g $grp -l $loc
+
+az deployment group create -g $grp --template-file "azuredeploy.json" --parameters storageAcctName=$acct
