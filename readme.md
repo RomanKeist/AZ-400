@@ -8,9 +8,7 @@
 - T06 - Implementing Continuous Feedback
 - T07 - Designing a DevOps Strategy
 
-[Lab Demo Recording](https://github.com/MicrosoftLearning/Lab-Demo-Recordings/blob/master/AZ-400.md)
-
-# Lab Machine Software Requirements
+## Lab Machine Software Requirements
 
 Lab Machine can be Windows, Mac, Linux. The below list is provided for a Windows 10 Machine.
 
@@ -39,3 +37,19 @@ Lab Machine can be Windows, Mac, Linux. The below list is provided for a Windows
 | Angular                                                   | npm i -g @angular/cli                                                                   |
 
 > Note: In order for Docker to work on a Windows 10 host you need to install Hyper-V or use Windows Subsystem for Linux 2 (WSL2). WSL will be availabe with Windows 10 Version 2004 - Mai 2020 Update. Please follow Setup Instructions for in the Root Installation Guide
+
+> Note: A detailed Setup Guide can be found [here](https://github.com/ARambazamba/ClassSetup)
+
+## Accounts Nedded
+
+[Github](https://github.com/)
+
+[Azure Devops](https://azure.microsoft.com/en-us/services/devops/?nav=min)
+
+Azure Account:
+
+- Using [Azure Passes](https://www.microsoftazurepass.com/) ... Needs Live ID oder Azure AD Account
+- Azure MSDN Subscription
+- [Azure Trial](https://azure.microsoft.com/en-us/free/)
+
+> Note: Please do not use a Production Account for Training
